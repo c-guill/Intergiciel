@@ -1,15 +1,29 @@
+package fr.miaou.messagerie.model;
+
 import java.sql.Timestamp;
+
+import jakarta.persistence.*;
 import lombok.Data;
 
-@Data
-@Document(collection = "messages")
+@Entity
+@Table(name = "messages")
 public class Message {
     @Id
     private Long idMessage;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     private User user;
     private Long idDestination;
     private String contenu;
     private Timestamp date;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Message() {}
 

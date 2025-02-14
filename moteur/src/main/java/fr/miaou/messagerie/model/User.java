@@ -1,7 +1,13 @@
-import lombok.Data;
+package fr.miaou.messagerie.model;
 
-@Data
-@Document(collection = "users")
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.Data;
+import jakarta.persistence.*;
+
+
+@Entity
+@Table(name = "users")
 public class User {
     @Id
     private Long idUser;
