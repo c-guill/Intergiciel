@@ -1,4 +1,4 @@
-package fr.miaou.Frontend;
+package fr.miaou.frontend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
