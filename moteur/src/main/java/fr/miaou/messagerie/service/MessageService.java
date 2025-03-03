@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +19,9 @@ public class MessageService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ProducerService producerService;
 
     public List<Message> getAllMessages() {
         return messageRepository.findAll();
@@ -33,6 +35,7 @@ public class MessageService {
     // Ajouter un nouveau message
     public Message createMessage(Long userId, String contenu, Long idDestination) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        this.producerService.sendMessage(contenu);  //envoyer message lu dans le body vers Kafka vers le topic paramètrè sur le service
         return messageRepository.save(Message.builder()
                 .user(user)
                 .idDestination(idDestination)

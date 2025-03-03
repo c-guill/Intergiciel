@@ -1,6 +1,6 @@
 package fr.miaou.messagerie.controller;
 
-import fr.miaou.messagerie.engine.Producer;
+import fr.miaou.messagerie.service.ProducerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/insa")
-public class ProducterController {
+public class ProducterController { //TODO A supprimer, plus utilisé
 
-    private final Producer producer;
+    private final ProducerService producerService;
 
     private final String service=this.getClass().getName();
 
     @Autowired
-    ProducterController(Producer producer) {this.producer = producer;}
+    ProducterController(ProducerService producerService) {this.producerService = producerService;}
 
     @GetMapping(value = "/isalive", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -31,7 +31,7 @@ public class ProducterController {
     public ResponseEntity<Object> sendMessageToKafkaTopic(@RequestBody() String message)
     {
 
-        this.producer.sendMessage(message);  //envoyer message lu dans le body vers Kafka vers le topic paramètrè sur le service
+        this.producerService.sendMessage(message);  //envoyer message lu dans le body vers Kafka vers le topic paramètrè sur le service
 
         return new ResponseEntity<>("{\"reponse\":\"Inserted\"}", HttpStatus.CREATED);  //retourner réussite en cas d'échec c'est le gestionnaire d'exceptions qui prend le relais.
     }

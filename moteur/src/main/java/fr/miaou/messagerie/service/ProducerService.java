@@ -1,4 +1,4 @@
-package fr.miaou.messagerie.engine;
+package fr.miaou.messagerie.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -6,7 +6,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class Producer {
+public class ProducerService {
 
     @Value("${application.topic}")
     private String TOPIC;
@@ -20,6 +20,7 @@ public class Producer {
         {
             System.out.println("Sending message: " + message);
             this.kafkaTemplate.send(TOPIC, message);
+
         }
         catch (Exception e)
         {
