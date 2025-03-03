@@ -1,5 +1,7 @@
 package fr.miaou.messagerie.repository;
 
 import fr.miaou.messagerie.model.Message;
-public interface MessageRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MessageRepository extends JpaRepository<Message, Long> {
 }
