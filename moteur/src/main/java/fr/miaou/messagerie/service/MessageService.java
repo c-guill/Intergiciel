@@ -2,10 +2,13 @@ package fr.miaou.messagerie.service;
 
 
 import fr.miaou.messagerie.model.Message;
+import fr.miaou.messagerie.model.User;
 import fr.miaou.messagerie.repository.MessageRepository;
+import fr.miaou.messagerie.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +18,10 @@ public class MessageService {
     @Autowired
     private MessageRepository messageRepository;
 
-    public List<Message> getAllMessages(){
+    @Autowired
+    private UserRepository userRepository;
+
+    public List<Message> getAllMessages() {
         return messageRepository.findAll();
     }
 
@@ -25,8 +31,14 @@ public class MessageService {
     }
 
     // Ajouter un nouveau message
-    public Message createMessage(Message message) {
-        return messageRepository.save(message);
+    public Message createMessage(Long userId, String contenu, Long idDestination) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        return messageRepository.save(Message.builder()
+                .user(user)
+                .idDestination(idDestination)
+                .contenu(contenu)
+                .date(new Timestamp(System.currentTimeMillis()))
+                .build());
     }
 
     // Supprimer un message par son ID
@@ -43,6 +55,7 @@ public class MessageService {
         }).orElseThrow(() -> new RuntimeException("Message non trouvé"));
     }
 }
+
 
 
 

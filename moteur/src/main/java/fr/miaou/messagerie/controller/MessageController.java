@@ -2,6 +2,7 @@ package fr.miaou.messagerie.controller;
 
 import fr.miaou.messagerie.model.Message;
 import fr.miaou.messagerie.service.MessageService;
+import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +32,8 @@ public class MessageController {
 
     // Ajouter un nouveau message
     @PostMapping
-    public Message createMessage(@RequestBody Message message) {
-        return messageService.createMessage(message);
+    public Message createMessage(@RequestParam Long userId, @RequestParam String contenu, @RequestParam Long idDestination) {
+        return messageService.createMessage(userId, contenu, idDestination);
     }
 
     // Supprimer un message par son ID
