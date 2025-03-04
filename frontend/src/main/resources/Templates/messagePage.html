@@ -10,21 +10,34 @@
 </head>
 <body>
 <div class="container-fluid">
-    <div class="row align-item-start">
-        <div class="contact-section d-flex justify-content-center align-content-start">
-            <h1 th:text="${username}"></h1>
-            <tr th:each="contact: ${contacts}">
-                <td th:text="${contact.username}"></td>
-            </tr>
+    <div class="app row align-item-start">
+        <div class="contact-section row d-flex justify-content-center align-content-start">
+            <div class="username">
+                <h1 th:text="${username}"></h1>
+            </div>
+            <div class="broadcast">
+                <h1>Général</h1>
+            </div>
+            <div class="contact">
+                <div class="contact-information" th:each="contact: ${contacts}">
+                    <h6 th:text="${contact.username}"></h6>
+                    <p class="d-inline-block text-truncate"></p>
+                </div>
+            </div>
         </div>
-        <div class="conversation-section d-flex align-content-start">
-            <div th:if="${messages.size > 0}">
-                <div class="conversation-information">
-                    <h1>Tom & Jerry</h1>
-                </div>
-                <div class="conversation-form">
-                    
-                </div>
+        <div th:if="${messages.size > 0}" class="conversation-section row d-flex align-content-start">
+            <div class="conversation-information">
+                <h3>Tom & Jerry</h3>
+            </div>
+            <div class="conversation">
+                <div class=" d-flex flex-column justify-content-end align-items-end"><label class="label-message">10:25</label><p class="message message-moi">Bonjour</p></div>
+                <div class="d-flex flex-column justify-content-start"><label class="label-message">Tom & jerry  10:26</label><p class="message message-lui text-wrap">Bonjour ! Comment ça va, moi ca va super</p></div>
+                <div class="d-flex flex-column justify-content-start"><label class="label-message">Tom & jerry  10:26</label><p class="message message-lui text-wrap">Bonjour ! Comment ça va, moi ca va super</p></div>
+                <div class="d-flex flex-column justify-content-end align-items-end"><label class="label-message">10:27</label><p class="message message-moi text-wrap">Bonjour ! Comment ça va, moi ca va super</p></div>
+                <div class="d-flex flex-column justify-content-end align-items-end"><label class="label-message">10:30</label><p class="message message-moi text-wrap">Bonjour ! Comment ça va, moi ca va super</p></div>
+            </div>
+            <div class="conversation-form">
+                <input type="text" name="send-message" class="form-control" id="message" placeholder="Taper un message" required>
             </div>
         </div>
     </div>
