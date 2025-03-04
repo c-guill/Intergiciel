@@ -1,0 +1,75 @@
+.contact-section {
+  width: 15%;
+  background-color: /*#141414*/ #1F1F2DFF;
+  border-right: 2px solid #5d5d85;
+}
+
+
+
+.app {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+.conversation-section {
+  width: 85%;
+  background-color: #1f1f1f;
+}
+
+.conversation-information {
+  position: static;
+  top: 0;
+  height: 45px;
+  width: 100%;
+  margin: 5px;
+  border-bottom: 1px solid #111111;
+ }
+
+.conversation {
+  position: static;
+  height: calc(100vh - 50px - 95px);
+  width: 100%;
+  overflow: auto;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.conversation-form {
+  position: static;
+  margin: 20px;
+  width: 100%;
+  height: 45px;
+}
+
+.message {
+  padding: 5px;
+  max-width: 70%;
+  width: fit-content;
+}
+
+.message-lui {
+  background-color: #353535;
+  border: 5px #353535 solid;
+  border-radius: 2px;
+}
+
+.message-moi {
+  background-color: #5d5d85;
+  border: 2px #5d5d85 solid;
+  border-radius: 5px;
+}
+
+.label-message {
+  font-size: 13px;
+  margin: 0 5px;
+}
+
+.contact {
+  width: 100%;
+}
+
+.contact-information {
+  width: 100%;
+  margin: 5px;
+}

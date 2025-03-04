@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title> Mewling page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/messagePage.css}">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <!-- Lien vers le fichier CSS externe -->
+</head>
+<body>
+<div class="container-fluid">
+    <div class="app row align-item-start">
+        <div class="contact-section row d-flex justify-content-center align-content-start">
+            <div class="username">
+                <h1 th:text="${username}"></h1>
+            </div>
+            <div class="broadcast">
+                <h1>Général</h1>
+            </div>
+            <div class="contact">
+                <div class="contact-information" th:each="contact: ${contacts}">
+                    <h6 th:text="${contact.username}"></h6>
+                    <p class="d-inline-block text-truncate"></p>
+                </div>
+            </div>
+        </div>
+        <div th:if="${messages.size > 0}" class="conversation-section row d-flex align-content-start">
+            <div class="conversation-information">
+                <h3>Tom & Jerry</h3>
+            </div>
+            <div class="conversation">
+                <div class=" d-flex flex-column justify-content-end align-items-end"><label class="label-message">10:25</label><p class="message message-moi">Bonjour</p></div>
+                <div class="d-flex flex-column justify-content-start"><label class="label-message">Tom & jerry  10:26</label><p class="message message-lui text-wrap">Bonjour ! Comment ça va, moi ca va super</p></div>
+                <div class="d-flex flex-column justify-content-start"><label class="label-message">Tom & jerry  10:26</label><p class="message message-lui text-wrap">Bonjour ! Comment ça va, moi ca va super</p></div>
+                <div class="d-flex flex-column justify-content-end align-items-end"><label class="label-message">10:27</label><p class="message message-moi text-wrap">Bonjour ! Comment ça va, moi ca va super</p></div>
+                <div class="d-flex flex-column justify-content-end align-items-end"><label class="label-message">10:30</label><p class="message message-moi text-wrap">Bonjour ! Comment ça va, moi ca va super</p></div>
+            </div>
+            <div class="conversation-form">
+                <input type="text" name="send-message" class="form-control" id="message" placeholder="Taper un message" required>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
