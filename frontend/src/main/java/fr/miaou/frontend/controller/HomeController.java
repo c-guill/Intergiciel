@@ -79,32 +79,11 @@ public class HomeController {
         }
     }
 
-    @PostMapping("sendmessage")
-    @ResponseBody
-    public ResponseEntity<Message> sendMessage(@RequestParam String message, @CookieValue(value = "id", defaultValue = "") String useridstr, @CookieValue(value = "username", defaultValue = "") String username, @CookieValue(value = "targetid", defaultValue = "") String targetidstr) {
-        try {
-            long userid = Long.parseLong(useridstr);
-            long targetid = Long.parseLong(targetidstr);
-            return ResponseEntity.ok(this.apiService.sendMessage(message, new Contact(userid, username), new Contact(targetid, "notneeded")));
-        }catch (Exception e){
-            System.err.println("Error: " + e.getMessage());
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-    }
-
     private void setCookie(String key, String value){
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(60 * 60 * 24);
         cookie.setPath("/");
         cookie.setSecure(true);
         response.addCookie(cookie);
-    }
-
-    // Mapped as /app/messages
-    @MessageMapping("/application")  // Endpoint for messages sent to /app/notify
-    @SendTo("/all/messages")  // Destination for notifications broadcast
-    public Message sendMessage(final Message message) throws Exception {
-        return message;  // Simple echo of the message sent
     }
 }

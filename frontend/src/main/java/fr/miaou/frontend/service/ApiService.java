@@ -25,13 +25,6 @@ public class ApiService {
 
     private final String api = "http://localhost:8080/"; // Replace with your API URL
 
-    public Message getMessageFromJson(JsonNode node) {
-        JsonNode userPath = node.path("user");
-        Contact user = new Contact(userPath.path("idUser").asLong(), userPath.path("nom").asText());
-        Contact contact = new Contact(node.path("idDestination").asLong());
-
-        return this.getMessageFromJson(node, user, contact);
-    }
 
     public Message getMessageFromJson(JsonNode node, Contact user, Contact contact) {
         String date;
@@ -93,23 +86,4 @@ public class ApiService {
         }
     }
 
-    public Message sendMessage(String message, Contact user, Contact contact) throws Exception {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/x-www-form-urlencoded");
-
-        String body = "userId=" + user.getId() + "&contenu=" + message + "&idDestination=" + contact.getId();
-        HttpEntity<String> requestEntity = new HttpEntity<>(body, headers);
-        ResponseEntity<String> response = restTemplate.exchange(
-                this.api + "/message",
-                HttpMethod.POST,
-                requestEntity,
-                String.class);
-        if (response.getStatusCode() == HttpStatus.OK) {
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode rootNode = mapper.readTree(response.getBody());
-            return this.getMessageFromJson(rootNode, user, contact);
-        } else {
-            throw new RuntimeException("Error: " + response.getStatusCode());
-        }
-    }
 }
