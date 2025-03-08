@@ -31,7 +31,7 @@ public class ProducterController { //TODO A supprimer, plus utilisé
     public ResponseEntity<Object> sendMessageToKafkaTopic(@RequestBody() String message)
     {
 
-        this.producerService.sendMessage(message);  //envoyer message lu dans le body vers Kafka vers le topic paramètrè sur le service
+//        this.producerService.sendMessage(message);  //envoyer message lu dans le body vers Kafka vers le topic paramètrè sur le service
 
         return new ResponseEntity<>("{\"reponse\":\"Inserted\"}", HttpStatus.CREATED);  //retourner réussite en cas d'échec c'est le gestionnaire d'exceptions qui prend le relais.
     }

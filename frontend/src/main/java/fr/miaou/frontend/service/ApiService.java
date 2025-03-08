@@ -25,14 +25,30 @@ public class ApiService {
 
     private final String api = "http://localhost:8080/"; // Replace with your API URL
 
-    private Message getMessageFromJson(JsonNode node, Contact user, Contact contact) {
-        OffsetDateTime offsetDateTime = OffsetDateTime.parse(node.path("date").asText());
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    public Message getMessageFromJson(JsonNode node) {
+        JsonNode userPath = node.path("user");
+        Contact user = new Contact(userPath.path("idUser").asLong(), userPath.path("nom").asText());
+        Contact contact = new Contact(node.path("idDestination").asLong());
+
+        return this.getMessageFromJson(node, user, contact);
+    }
+
+    public Message getMessageFromJson(JsonNode node, Contact user, Contact contact) {
+        String date;
+        try {
+            OffsetDateTime offsetDateTime = OffsetDateTime.parse(node.path("date").asText());
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            date = offsetDateTime.format(outputFormatter);
+        }catch (Exception e){
+            Timestamp timestamp = new Timestamp(node.path("date").asLong());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            date = timestamp.toLocalDateTime().format(formatter);;
+        }
         return Message.builder()
                 .sender(node.path("idDestination").asLong() == user.getId() ? contact : user)
                 .receiver(node.path("idDestination").asLong() == user.getId() ? user : contact)
                 .message(node.path("contenu").asText())
-                .date(offsetDateTime.format(outputFormatter)).build();
+                .date(date).build();
     }
 
 

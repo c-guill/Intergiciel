@@ -35,13 +35,14 @@ public class MessageService {
     // Ajouter un nouveau message
     public Message createMessage(Long userId, String contenu, Long idDestination) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        this.producerService.sendMessage(contenu);  //envoyer message lu dans le body vers Kafka vers le topic paramètrè sur le service
-        return messageRepository.save(Message.builder()
+        Message message = messageRepository.save(Message.builder()
                 .user(user)
                 .idDestination(idDestination)
                 .contenu(contenu)
                 .date(new Timestamp(System.currentTimeMillis()))
                 .build());
+        this.producerService.sendMessage(message);
+        return message;
     }
 
     // Supprimer un message par son ID

@@ -32,7 +32,7 @@
             <div id="chat" class="conversation">
                 <div th:each="message: ${messages}">
                     <div th:if="${message.sender.username == username}" class=" d-flex flex-column justify-content-end align-items-end"><label th:text="${message.sender.username} + ' - ' + ${message.date}" class="label-message"></label><p th:text="${message.message}" class="message message-moi"></p></div>
-                    <div th:if="${message.sender.username != username}" class="d-flex flex-column justify-content-start"><label th:text="${message.sender.username} + ' - ' + ${message.date}" class="label-message"></label><p th:text="${message.message}" class="message message-lui text-wrap"></p></div>
+                    <div th:if="${message.sender.username != username}" class="d-flex flex-column justify-content-start align-items-start"><label th:text="${message.sender.username} + ' - ' + ${message.date}" class="label-message"></label><p th:text="${message.message}" class="message message-lui text-wrap"></p></div>
                 </div>
             </div>
             <div class="conversation-form">
@@ -43,6 +43,8 @@
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script th:src="@{../js/messagePage.js}"></script>
 </body>
 </html>

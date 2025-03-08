@@ -2,6 +2,35 @@ const chat = document.getElementById('chat');
 
 chat.scrollTo(0, chat.scrollHeight);
 
+var socket = new SockJS('/ws');
+var stompClient = Stomp.over(socket);
+
+stompClient.connect({}, function (frame) {
+    // console.log('Connecté: ' + frame);
+    stompClient.subscribe('/all/messages', function (result) {
+        showMessage(result.body, false);
+    });
+});
+
+function showMessage(message, selfMessage) {
+    // console.log(message);
+    if (selfMessage) {
+        chat.insertAdjacentHTML('beforeend',
+            "<div class='d-flex flex-column justify-content-end align-items-end'>" +
+            "<label class='label-message'>"+message.sender.username + " - "+ message.date +"</label>" +
+            "<p class='message message-moi'>"+message.message+"</p>");
+    } else {
+        // console.log(message.sender);
+        chat.insertAdjacentHTML('beforeend',
+            "<div class='d-flex flex-column justify-content-start align-items-start'>" +
+            "<label class='label-message'>"+"jsp" + " - "+ "date" +"</label>" +
+            "<p class='message message-lui text-wrap'>"+"message.message"+"</p>");
+        // chat.insertAdjacentHTML('beforeend',
+        //     "<div class='d-flex flex-column justify-content-start align-items-start'>" +
+        //     "<label class='label-message'>"+message.sender.username + " - "+ message.date +"</label>" +
+        //     "<p class='message message-lui text-wrap'>"+message.message+"</p>");
+    }
+}
 
 function sendMessage() {
     var message = $('#message').val();
@@ -11,10 +40,7 @@ function sendMessage() {
         url: "/sendmessage",
         data: {message: message},
         success: function (response) {
-            chat.insertAdjacentHTML('beforeend',
-                "<div class='d-flex flex-column justify-content-end align-items-end'>" +
-                "<label class='label-message'>"+response.sender.username + " - "+ response.date +"</label>" +
-                "<p class='message message-moi'>"+response.message+"</p>");
+            showMessage(response, true);
 
         },
         error: function() {

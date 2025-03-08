@@ -32,4 +32,8 @@ public class Contact {
         this.id = id;
         this.username = username;
     }
+
+    public Contact(Long id) {
+        this.id = id;
+    }
 }
