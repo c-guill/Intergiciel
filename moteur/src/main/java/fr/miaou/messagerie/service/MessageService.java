@@ -57,6 +57,15 @@ public class MessageService {
             return messageRepository.save(message);
         }).orElseThrow(() -> new RuntimeException("Message non trouvé"));
     }
+
+    public List<Message> getMessageByDiscussion(Long idUser, Long idDestination) {
+        return this.messageRepository.findAllByDiscussion(idUser, idDestination);
+    }
+
+    public Optional<Message> getLastMessageByDiscussion(Long idUser, Long idDestination) {
+        return Optional.ofNullable(this.messageRepository.findlastMessageByDiscussion(idUser, idDestination));
+
+    }
 }
 
 

@@ -2,7 +2,6 @@ package fr.miaou.messagerie.controller;
 
 import fr.miaou.messagerie.model.Message;
 import fr.miaou.messagerie.service.MessageService;
-import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +51,11 @@ public class MessageController {
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/discussion")
+    public ResponseEntity<List<Message>> getMessagesByDiscussion(@RequestParam Long idUser, @RequestParam Long idDestination) {
+        return ResponseEntity.ok(this.messageService.getMessageByDiscussion(idUser, idDestination));
     }
 }
 
