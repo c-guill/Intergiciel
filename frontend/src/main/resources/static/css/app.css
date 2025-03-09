@@ -21,3 +21,13 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #363636;
 }
+
+.btn-main {
+    background-color: #A91D3A;
+    color: #fafafae6;
+    margin-top: 5px;
+}
+
+.btn-main:focus {
+    border-color: #A91D3A !important;
+}

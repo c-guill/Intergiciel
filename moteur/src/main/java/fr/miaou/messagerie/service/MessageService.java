@@ -33,15 +33,17 @@ public class MessageService {
     }
 
     // Ajouter un nouveau message
-    public Message createMessage(Long userId, String contenu, Long idDestination) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        this.producerService.sendMessage(contenu);  //envoyer message lu dans le body vers Kafka vers le topic paramètrè sur le service
-        return messageRepository.save(Message.builder()
-                .user(user)
-                .idDestination(idDestination)
-                .contenu(contenu)
-                .date(new Timestamp(System.currentTimeMillis()))
-                .build());
+    public Message createMessage(Message message) {
+//        System.err.println(userId + contenu + idDestination);
+//        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+//        Message message = messageRepository.save(Message.builder()
+//                .user(user)
+//                .idDestination(idDestination)
+//                .contenu(contenu)
+//                .date(new Timestamp(System.currentTimeMillis()))
+//                .build());
+//        this.producerService.sendMessage(message);
+        return this.messageRepository.save(message);
     }
 
     // Supprimer un message par son ID
@@ -56,6 +58,18 @@ public class MessageService {
             message.setDate(messageDetails.getDate());
             return messageRepository.save(message);
         }).orElseThrow(() -> new RuntimeException("Message non trouvé"));
+    }
+
+    public List<Message> getMessageByDiscussion(Long idUser, Long idDestination) {
+        if (idDestination == -1) {
+            return this.messageRepository.findAllByidDestination(idDestination);
+        }
+        return this.messageRepository.findAllByDiscussion(idUser, idDestination);
+    }
+
+    public Optional<Message> getLastMessageByDiscussion(Long idUser, Long idDestination) {
+        return Optional.ofNullable(this.messageRepository.findlastMessageByDiscussion(idUser, idDestination));
+
     }
 }
 

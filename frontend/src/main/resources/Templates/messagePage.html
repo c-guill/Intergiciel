@@ -4,6 +4,7 @@
     <title> Mewling page</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/messagePage.css}">
     <link rel="stylesheet" th:href="@{/css/app.css}">
     <!-- Lien vers le fichier CSS externe -->
@@ -11,36 +12,60 @@
 <body>
 <div class="container-fluid">
     <div class="app row align-item-start">
-        <div class="contact-section row d-flex justify-content-center align-content-start">
+        <div class="contact-section col-3 row d-flex justify-content-center align-content-start">
             <div class="username">
                 <h1 th:text="${username}"></h1>
             </div>
-            <div class="broadcast">
-                <h1>Général</h1>
-            </div>
             <div class="contact">
-                <div class="contact-information" th:each="contact: ${contacts}">
-                    <h6 th:text="${contact.username}"></h6>
-                    <p class="d-inline-block text-truncate"></p>
+                <div onclick="changeUser(0)" class="contact-information">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="bold">Général</p>
+                        <p>05/12</p>
+                    </div>
+                    <div><p class="text-truncate">tout ca bientout ca bientout ca bientout ca bientout ca bientout ca bientout ca bientout ca bientout ca bientout ca bientout ca bien</p></div>
+                </div>
+                <div th:if="${userid} != -1" th:attr="onclick=|changeUser('${contact.id}')|" class="contact-information" th:each="contact: ${contacts}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="user row">
+                            <p class="bold" th:text="${contact.username}"></p>
+                            <div class="available"></div>
+                        </div>
+                        <p th:text="${contact.date}"></p>
+                    </div>
+                    <div><p class="text-truncate" th:text="${contact.lastMessage}"></p></div>
                 </div>
             </div>
         </div>
-        <div th:if="${messages.size > 0}" class="conversation-section row d-flex align-content-start">
-            <div class="conversation-information">
-                <h3>Tom & Jerry</h3>
+        <div class="conversation-section col-9 row d-flex align-content-start">
+            <div class="conversation-information d-flex justify-content-between align-items-center">
+                <h3 th:text="${targetusername}"></h3>
+                <button onclick="disconnect();" class="btn btn-main btn-disconnect">Disconnect</button>
             </div>
-            <div class="conversation">
-                <div class=" d-flex flex-column justify-content-end align-items-end"><label class="label-message">10:25</label><p class="message message-moi">Bonjour</p></div>
-                <div class="d-flex flex-column justify-content-start"><label class="label-message">Tom & jerry  10:26</label><p class="message message-lui text-wrap">Bonjour ! Comment ça va, moi ca va super</p></div>
-                <div class="d-flex flex-column justify-content-start"><label class="label-message">Tom & jerry  10:26</label><p class="message message-lui text-wrap">Bonjour ! Comment ça va, moi ca va super</p></div>
-                <div class="d-flex flex-column justify-content-end align-items-end"><label class="label-message">10:27</label><p class="message message-moi text-wrap">Bonjour ! Comment ça va, moi ca va super</p></div>
-                <div class="d-flex flex-column justify-content-end align-items-end"><label class="label-message">10:30</label><p class="message message-moi text-wrap">Bonjour ! Comment ça va, moi ca va super</p></div>
+            <div id="chat" class="conversation">
+                <div th:each="message: ${messages}">
+                    <div th:if="${message.sender.username == username}" class=" d-flex flex-column justify-content-end align-items-end">
+                        <label th:text="${message.sender.username} + ' - ' + ${message.date}" class="label-message"></label>
+                        <p th:text="${message.message}" class="message message-moi"></p>
+                    </div>
+                    <div th:if="${message.sender.username != username}" class="d-flex flex-column justify-content-start align-items-start">
+                        <label th:text="${message.sender.username} + ' - ' + ${message.date}" class="label-message"></label><p th:text="${message.message}" class="message message-lui text-wrap">
+                    </p>
+                    </div>
+                </div>
             </div>
-            <div class="conversation-form">
-                <input type="text" name="send-message" class="form-control" id="message" placeholder="Taper un message" required>
+            <div th:if="${userid} != -1" class="conversation-form row input-group">
+                <input type="text" name="send-message" class="form-control message-sender" id="message-sender" placeholder="Taper un message" onkeydown="enter(this)" required>
+                <div class="input-group-append">
+                    <button onclick="sendMessage();" class="btn btn-send"><i class="material-icons">send</i></button>
+                </div>
+
             </div>
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script th:src="@{../js/messagePage.js}"></script>
 </body>
 </html>
