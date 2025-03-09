@@ -35,7 +35,7 @@ public class UserService {
                     .id(user.getIdUser())
                     .username(user.getNom()).build();
             message.ifPresent(value -> contact.setLastMessage(value.getContenu()));
-            message.ifPresent(value -> contact.setTimestamp(value.getDate()));
+            message.ifPresent(value -> contact.setDate(value.getDate()));
             contacts.add(contact);
         }
 

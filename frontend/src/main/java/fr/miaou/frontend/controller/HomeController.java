@@ -36,7 +36,7 @@ public class HomeController {
 
     @GetMapping("/message")
     public String messagePage() {
-        return "redirect:/message/2";
+        return "redirect:/message/0";
     }
 
     @GetMapping("/message/{id}")
@@ -47,9 +47,17 @@ public class HomeController {
         try {
             long userid = Long.parseLong(useridstr);
             long targetid = Long.parseLong(id);
+            if (userid == -1 && targetid != 0) {
+                return "redirect:/";
+            }
             Contact garfield = new Contact(userid, username, null, null, Status.AVAILABLE);
             List<Contact> contacts = this.apiService.getContacts(garfield);
-            Optional<Contact> target = contacts.stream().filter(contact -> contact.getId().equals(targetid)).findFirst();
+            Optional<Contact> target;
+            if (targetid == 0) {
+                target = Optional.of(new Contact(-1L, "Général"));
+            } else {
+                target = contacts.stream().filter(contact -> contact.getId().equals(targetid)).findFirst();
+            }
             if (target.isEmpty()) {
                 return "redirect:/";
             }
@@ -57,6 +65,7 @@ public class HomeController {
             ArrayList<Message> messages = this.apiService.getDiscussion(garfield, target.get());
             model.addAttribute("targetusername", target.get().getUsername());
             model.addAttribute("username", username);
+            model.addAttribute("userid", userid);
             model.addAttribute("contacts", contacts);
             model.addAttribute("messages", messages);
             return "messagePage";
@@ -69,6 +78,11 @@ public class HomeController {
     @PostMapping("/connection")
     @ResponseBody
     public boolean submitForm(@RequestParam String username) {
+        if (username.isEmpty()) {
+            this.setCookie("username", "Anonyme");
+            this.setCookie("id", "-1");
+            return true;
+        }
         try {
             Contact contact = this.apiService.getContact(username);
             this.setCookie("username", contact.getUsername());
@@ -77,6 +91,14 @@ public class HomeController {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @DeleteMapping("/disconnect")
+    @ResponseBody
+    public void disconnect() {
+        this.setCookie("username", null);
+        this.setCookie("id", null);
+        this.setCookie("targetid", null);
     }
 
     private void setCookie(String key, String value){

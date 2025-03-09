@@ -7,9 +7,7 @@ function submitData() {
         url: "/connection",
         data: { username: username},
         success: function(response) {
-            // Handle the response here
-            // $('#result').html(response);
-            window.location.href = '/message'; //one level up
+            window.location.href = '/message';
         }
     });
 }

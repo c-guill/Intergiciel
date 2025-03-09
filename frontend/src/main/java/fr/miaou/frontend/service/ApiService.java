@@ -37,9 +37,13 @@ public class ApiService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
             date = timestamp.toLocalDateTime().format(formatter);;
         }
+        if (contact.getId() == -1) {
+            user = new Contact(node.path("user").path("idUser").asLong(),
+                    node.path("user").path("nom").asText());
+        }
         return Message.builder()
-                .sender(node.path("idDestination").asLong() == user.getId() ? contact : user)
-                .receiver(node.path("idDestination").asLong() == user.getId() ? user : contact)
+                .sender(node.path("user").path("idUser").asLong() == user.getId() ? user : contact)
+                .receiver(node.path("user").path("idUser").asLong() == user.getId() ? contact : user)
                 .message(node.path("contenu").asText())
                 .date(date).build();
     }

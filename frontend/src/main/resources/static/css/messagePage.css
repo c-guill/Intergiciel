@@ -1,7 +1,8 @@
 .contact-section {
-  width: 15%;
-  background-color: /*#141414*/ #1F1F2DFF;
+  background-color: #1F1F2DFF;
   border-right: 2px solid #5d5d85;
+  margin: 0;
+  padding: 0;
 }
 
 
@@ -13,8 +14,9 @@
 }
 
 .conversation-section {
-  width: 85%;
   background-color: #1f1f1f;
+  padding: 0;
+  margin: 0;
 }
 
 .conversation-information {
@@ -70,25 +72,71 @@
 }
 
 .contact-information {
-  width: 100%;
-  margin: 5px;
+  width: calc(100% - 30px);
+  height: 60px;
+  padding: 0 5px;
+  margin: 5px 10px;
 }
 
-.btn-main {
-  background-color: #A91D3A;
-  color: #fafafae6;
-  margin-top: 5px;
+.contact-information:hover {
+  background-color: #353535;
+  border: 1px solid #4e4e4e;
+  border-radius: 5px;
+
 }
 
-.btn-main:focus {
-  border-color: #A91D3A !important;
+.btn-send {
+  background-color: #1E1E1E;
+  width: 50px;
+  color: #fafafa;
+  /*margin-top: 5px;*/
+  height: 100%;
+  border: 1px solid #5d5d85;
+  border-left: none;
+
 }
 
-.form-control:focus {
-  border-color: #A91D3A !important;
-  box-shadow: 0 0 5px rgb(199, 54, 89) !important;
-  background-color: #fff5f0;
-}
 button {
   width: 20px;
 }
+
+.message-sender {
+  background-color: #1E1E1E;
+  color: #fafafa;
+  border: 1px solid #5d5d85;
+  border-right: none;
+  height: 100%;
+}
+
+.btn-disconnect {
+  width: 100px;
+}
+
+.message-sender:focus {
+  background-color: #1E1E1E !important;
+  color: #fafafa !important;
+  border: 1px solid #5d5d85 !important;
+  border-right: none !important;
+  height: 100% !important;
+  box-shadow: none !important;
+}
+
+
+.available{
+  background: #40d70e;
+  border-radius:50%;
+  width:10px;
+  height:10px;
+}
+
+.absent{
+  background: #d75b0e;
+  border-radius:50%;
+  width:10px;
+  height:10px;
+}
+
+.user {
+  margin: 0;
+}
+

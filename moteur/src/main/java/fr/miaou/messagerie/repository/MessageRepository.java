@@ -16,4 +16,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Query("SELECT m FROM Message m WHERE (m.user.idUser = :idUser OR m.user.idUser = :idDestination) AND (m.idDestination = :idUser OR m.idDestination = :idDestination) ORDER BY m.date DESC  LIMIT 1")
     Message findlastMessageByDiscussion(@Param("idUser") Long idUser,@Param("idDestination") Long idDestination);
+
+    List<Message> findAllByidDestination(@Param("idDestination") Long idDestination);
 }

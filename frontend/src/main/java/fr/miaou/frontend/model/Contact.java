@@ -5,26 +5,29 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.time.format.DateTimeFormatter;
 
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-@Builder
 public class Contact {
 
 
     public Long id;
     public String username;
     public String lastMessage;
-    public Timestamp timestamp;
+    public String date;
     public Status status;
 
     public Contact(Long id, String username, String lastMessage, Timestamp timestamp, Status status) {
         this.id = id;
         this.username = username;
         this.lastMessage = lastMessage;
-        this.timestamp = timestamp;
+        if (timestamp != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            this.date = timestamp.toLocalDateTime().format(formatter);
+        }
         this.status = status;
     }
 

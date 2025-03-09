@@ -8,21 +8,12 @@
   border-radius: 10px;
 }
 
-.btn-main {
-  background-color: #A91D3A;
-  color: #fafafae6;
-  margin-top: 5px;
-}
-
-.btn-main:focus {
-  border-color: #A91D3A !important;
+button {
+  width: 100%;
 }
 
 .form-control:focus {
   border-color: #A91D3A !important;
   box-shadow: 0 0 5px rgb(199, 54, 89) !important;
   background-color: #fff5f0;
-}
-button {
-  width: 100%;
 }

@@ -61,6 +61,9 @@ public class MessageService {
     }
 
     public List<Message> getMessageByDiscussion(Long idUser, Long idDestination) {
+        if (idDestination == -1) {
+            return this.messageRepository.findAllByidDestination(idDestination);
+        }
         return this.messageRepository.findAllByDiscussion(idUser, idDestination);
     }
 
