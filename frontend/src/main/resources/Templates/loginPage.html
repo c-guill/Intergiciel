@@ -1,21 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Mewling page</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mewling Page</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/app.css}">
     <link rel="stylesheet" th:href="@{/css/loginPage.css}">
 </head>
 <body>
-<section class="main-section ">
-    <div class="mb-3">
-        <label for="username" class="form-label">Nom d'utilisateur</label>
-        <input type="text" name="username" class="form-control" id="username" placeholder="Garfield" required>
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="login-container p-4">
+        <h3 class="text-center mb-3">Connexion</h3>
+        <div class="form-group">
+            <label for="username">Nom d'utilisateur</label>
+            <input type="text" name="username" class="form-control" id="username" placeholder="Garfield" required>
+        </div>
         <button onclick="submitData()" class="btn btn-main">Se connecter</button>
     </div>
-</section>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script th:src="@{js/loginPage.js}"></script>
 </body>

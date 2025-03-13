@@ -3,7 +3,31 @@ const chat = document.getElementById('chat');
 chat.scrollTo(0, chat.scrollHeight);
 
 let stompClient = null;
+let notificationBadge = null; // Définir notificationBadge ici
+// Fonction qui affiche la notification
+let messageNotification = null;
+function showNotification() {
+    if (!notificationBadge) {
+        // Si le badge n'existe pas encore, crée-le
+        notificationBadge = document.createElement('div');
+        notificationBadge.id = 'notification-badge';
+        notificationBadge.className = 'notification-badge';
+        notificationBadge.innerHTML = '🔔'; // Icône de notification
+        // document.body.appendChild(notificationBadge);
+        let idUser = Number(localStorage.getItem("selectedUserId"));
+        const elements = document.querySelectorAll('.contact-information p.bold');
+        for (let i = 0; i < elements.length; i++) {
+            if (i + 1 === idUser) {
+                messageNotification = document.querySelectorAll('.message-notification')[i];
+            }
+        }
+        messageNotification.append(notificationBadge)
+    }
 
+    // On le rend visible
+    notificationBadge.style.display = 'block';
+
+}
 function connect() {
     var userid = getCookie("id")
     if (userid == null || userid === "-1") return;
@@ -13,7 +37,8 @@ function connect() {
         stompClient.subscribe('/all/messages', function (response) {
             message = JSON.parse(response.body);
             if (message.idDestination === parseInt(userid)) {
-                showMessage(message, false)
+                showMessage(message, false);
+                showNotification(); // Afficher la notification
             }
 
         });
@@ -60,8 +85,28 @@ function sendMessage() {
 }
 
 function changeUser(idUser) {
-    window.location.href = '/message/' + idUser;
+    localStorage.setItem("selectedUserId", idUser); // Sauvegarde l'ID sélectionné
+    window.location.href = '/message/' + idUser; // Recharge la page avec l'ID sélectionné
+    let badge = document.getElementById(`badge-${idUser}`);
+    if (badge) {
+        badge.style.display = "none";
+    }
+
 }
+// Appliquer la classe au chargement de la page
+document.addEventListener("DOMContentLoaded", function() {
+    const selectedUserId = localStorage.getItem("selectedUserId");
+    if (selectedUserId) {
+        document.querySelectorAll(".contact-information").forEach(el => {
+            el.classList.remove("selected-contact"); // Retire la sélection des autres
+        });
+
+        const selectedContact = document.querySelector(`[onclick="changeUser('${selectedUserId}')"]`);
+        if (selectedContact) {
+            selectedContact.classList.add("selected-contact");
+        }
+    }
+});
 
 function disconnect() {
     $.ajax({
@@ -93,5 +138,8 @@ function formatDate(date) {
 
     return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
+
+
+
 
 window.onload = connect;
