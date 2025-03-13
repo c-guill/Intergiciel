@@ -4,13 +4,12 @@ import fr.miaou.frontend.model.Contact;
 import fr.miaou.frontend.model.Message;
 import fr.miaou.frontend.model.Status;
 import fr.miaou.frontend.service.ApiService;
+import fr.miaou.frontend.service.KafkaDynamicConsumerService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.messaging.handler.annotation.MessageMapping;
-//import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +28,9 @@ public class HomeController {
     @Autowired
     HttpServletResponse response;
 
+    @Autowired
+    private KafkaDynamicConsumerService kafkaDynamicConsumerService;
+
     @GetMapping("/")
     public String home() {
         return "loginPage";
@@ -38,6 +40,7 @@ public class HomeController {
     public String messagePage() {
         return "redirect:/message/0";
     }
+
 
     @GetMapping("/message/{id}")
     public String messagePageDiscussion(@PathVariable String id, Model model, @CookieValue(value = "username", defaultValue = "") String username, @CookieValue(value = "id", defaultValue = "-1") String useridstr) {
@@ -50,6 +53,7 @@ public class HomeController {
             if (userid == -1 && targetid != 0) {
                 return "redirect:/";
             }
+            this.kafkaDynamicConsumerService.startListening(useridstr);
             Contact garfield = new Contact(userid, username, null, null, Status.AVAILABLE);
             List<Contact> contacts = this.apiService.getContacts(garfield);
             Optional<Contact> target;
@@ -107,5 +111,19 @@ public class HomeController {
         cookie.setPath("/");
         cookie.setSecure(true);
         response.addCookie(cookie);
+    }
+
+    @PostMapping("sendmessage")
+    @ResponseBody
+    public ResponseEntity<Message> sendMessage(@RequestParam String message, @CookieValue(value = "id", defaultValue = "") String useridstr, @CookieValue(value = "username", defaultValue = "") String username, @CookieValue(value = "targetid", defaultValue = "") String targetidstr) {
+        try {
+            long userid = Long.parseLong(useridstr);
+            long targetid = Long.parseLong(targetidstr);
+            return ResponseEntity.ok(this.apiService.sendMessage(message, new Contact(userid, username), new Contact(targetid, "notneeded")));
+        }catch (Exception e){
+            System.err.println("Error: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 }

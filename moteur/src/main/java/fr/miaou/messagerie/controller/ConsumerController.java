@@ -24,13 +24,14 @@ public class ConsumerController {
 
     @KafkaListener(topics = "${spring.kafka.consumer.topic-name}", groupId = "${spring.kafka.consumer.group-id}")
     public void listen(String json) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            Message message = mapper.readValue(json, Message.class);
-            this.messageService.createMessage(message);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            ObjectMapper mapper = new ObjectMapper();
+//            Message message = mapper.readValue(json, Message.class);
+//            this.messageService.createMessage(message);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        System.out.println("écouté: "+json);
     }
 
     @GetMapping(value = "/isalive", produces = MediaType.APPLICATION_JSON_VALUE)

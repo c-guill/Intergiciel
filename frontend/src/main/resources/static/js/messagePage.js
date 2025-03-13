@@ -3,53 +3,54 @@ const chat = document.getElementById('chat');
 chat.scrollTo(0, chat.scrollHeight);
 
 let stompClient = null;
-let notificationBadge = null; // Définir notificationBadge ici
-// Fonction qui affiche la notification
-let messageNotification = null;
-function showNotification() {
-    if (!notificationBadge) {
-        // Si le badge n'existe pas encore, crée-le
-        notificationBadge = document.createElement('div');
-        notificationBadge.id = 'notification-badge';
-        notificationBadge.className = 'notification-badge';
-        notificationBadge.innerHTML = '🔔'; // Icône de notification
-        // document.body.appendChild(notificationBadge);
-        let idUser = Number(localStorage.getItem("selectedUserId"));
-        const elements = document.querySelectorAll('.contact-information p.bold');
-        for (let i = 0; i < elements.length; i++) {
-            if (i + 1 === idUser) {
-                messageNotification = document.querySelectorAll('.message-notification')[i];
-            }
-        }
-        messageNotification.append(notificationBadge)
-    }
 
-    // On le rend visible
-    notificationBadge.style.display = 'block';
+var userid = getCookie("id")
+var targetid = getCookie("targetid")
 
-}
 function connect() {
-    var userid = getCookie("id")
-    if (userid == null || userid === "-1") return;
-    const socket = new SockJS('http://localhost:8080/ws'); // Change the URL to your WebSocket endpoint
+    const socket = new SockJS('/ws');
     stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
-        stompClient.subscribe('/all/messages', function (response) {
-            message = JSON.parse(response.body);
-            if (message.idDestination === parseInt(userid)) {
-                showMessage(message, false);
-                showNotification(); // Afficher la notification
-            }
 
+    stompClient.connect({}, function(frame) {
+        console.log('Connecté: ' + frame);
+
+        stompClient.subscribe('/topic/message', function(message) {
+            try {
+                const jsonObject = JSON.parse(message.body);
+                if (parseInt(targetid) === jsonObject.user.idUser) {
+                    showMessage(jsonObject, false);
+                } else {
+                    alert("alert");
+                }
+            }catch (error) {
+                console.error("Parsing error:", error);
+            }
+        });
+        stompClient.subscribe('/topic/broadcast', function(message) {
+            try {
+                const jsonObject = JSON.parse(message.body);
+                console.log(jsonObject);
+                console.log(parseInt(userid))
+                console.log(parseInt(userid) === jsonObject.user.idUser)
+                if (parseInt(userid) === jsonObject.user.idUser) return;
+                if (parseInt(targetid) === -1) {
+                    showMessage(jsonObject, false);
+                } else {
+                    alert("alert");
+                }
+            }catch (error) {
+                console.error("Parsing error:", error);
+            }
         });
     });
 }
+
 
 function showMessage(message, selfMessage) {
     if (selfMessage) {
         chat.insertAdjacentHTML('beforeend',
             "<div class='d-flex flex-column justify-content-end align-items-end'>" +
-            "<label class='label-message'>"+message.senderusername + " - "+ message.date +"</label>" +
+            "<label class='label-message'>"+message.sender.username + " - "+ message.date +"</label>" +
             "<p class='message message-moi'>"+message.message+"</p>");
         chat.scrollTo(0, chat.scrollHeight);
     } else {
@@ -74,13 +75,18 @@ function sendMessage() {
         return
     }
     messageElement.value = '';
-    var userid = getCookie("id")
-    if (userid == null || userid === "-1") return;
-    var username = getCookie("username")
-    var targetid = getCookie("targetid")
-    const message = {'senderusername':username, 'senderid': userid, 'targetid': targetid, 'message':messageText, 'date':formatDate(new Date())};
-    showMessage(message, true);
-    stompClient.send("/app/application", {}, JSON.stringify(message));
+    $.ajax({
+        type: "POST",
+        url: "/sendmessage",
+        data: {message: messageText},
+        success: function (response) {
+            showMessage(response, true);
+
+        },
+        error: function() {
+            alert("Error with the server, please contact an administrator.");
+        }
+    });
 
 }
 
