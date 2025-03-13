@@ -7,6 +7,32 @@ let stompClient = null;
 var userid = getCookie("id")
 var targetid = getCookie("targetid")
 
+let notificationBadge = null; // Définir notificationBadge ici
+// Fonction qui affiche la notification
+let messageNotification = null;
+function showNotification() {
+    if (!notificationBadge) {
+        // Si le badge n'existe pas encore, crée-le
+        notificationBadge = document.createElement('div');
+        notificationBadge.id = 'notification-badge';
+        notificationBadge.className = 'notification-badge';
+        notificationBadge.innerHTML = '🔔'; // Icône de notification
+        // document.body.appendChild(notificationBadge);
+        let idUser = Number(localStorage.getItem("selectedUserId"));
+        const elements = document.querySelectorAll('.contact-information p.bold');
+        for (let i = 0; i < elements.length; i++) {
+            if (i + 1 === idUser) {
+                messageNotification = document.querySelectorAll('.message-notification')[i];
+            }
+        }
+        messageNotification.append(notificationBadge)
+    }
+
+    // On le rend visible
+    notificationBadge.style.display = 'block';
+
+}
+
 function connect() {
     const socket = new SockJS('/ws');
     stompClient = Stomp.over(socket);
