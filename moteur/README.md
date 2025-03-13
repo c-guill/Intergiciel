@@ -1,4 +1,19 @@
-# Projet Intergiciel
+# Projet  Intergiciel : Messagerie Miaou
+
+
+## Equipe :
+
+Guillier Camille 22004270
+
+Mekouar Doha 22301456
+
+Gadiaga Sokhna Laye 22106253
+
+Guarim Raphael 22304361
+
+
+## Description
+Ce projet est une application de messagerie en temps réel basée sur Spring Boot, avec un frontend en Thymeleaf et une base de données PostgreSQL. Il utilise Apache Kafka pour assurer une communication asynchrone et scalable entre les utilisateurs
 
 ## Prérequis
 - Docker Desktop
