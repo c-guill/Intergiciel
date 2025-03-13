@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.kafka.listener.MessageListener;
 
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -14,28 +15,41 @@ public class KafkaDynamicConsumerService {
     @Autowired
     private KafkaDynamicConsumerConfig kafkaDynamicConsumerConfig;
 
-    private ConcurrentMessageListenerContainer<String, String> container;
+    private ConcurrentMessageListenerContainer<String, String> privateContainer;
+    private ConcurrentMessageListenerContainer<String, String> broadcastContainer;
 
     @Autowired
     private WebSocketService webSocketService;
 
 
     public void startListening(String groupId) {
-        if (container == null) {
+        if (privateContainer == null) {
             MessageListener<String, String> listener = record -> {
-                System.out.println(record.value());
                 this.webSocketService.sendMessage(record.value());
             };
-            container = kafkaDynamicConsumerConfig.kafkaListenerContainer(groupId, listener);
+            privateContainer = kafkaDynamicConsumerConfig.kafkaListenerContainer(groupId, Optional.empty(), listener);
         }
-        if (!container.isRunning()) {
-            container.start();
+
+        if (broadcastContainer == null) {
+            MessageListener<String, String> listener = record -> {
+                this.webSocketService.sendMessageBroadcast(record.value());
+            };
+            broadcastContainer = kafkaDynamicConsumerConfig.kafkaListenerContainer(groupId, Optional.of("broadcast"), listener);
+        }
+        if (!broadcastContainer.isRunning()) {
+            broadcastContainer.start();
+        }
+
+        if (!privateContainer.isRunning()) {
+            privateContainer.start();
         }
     }
 
     public void stopListening() {
-        if (container != null) {
-            container.stop();
+        if (privateContainer != null) {
+            privateContainer.stop();
         }
     }
+
+
 }

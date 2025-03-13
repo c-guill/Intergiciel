@@ -13,6 +13,7 @@ import org.springframework.kafka.listener.MessageListener;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 
 @Configuration
@@ -30,8 +31,8 @@ public class KafkaDynamicConsumerConfig {
         return new DefaultKafkaConsumerFactory<>(configProps);
     }
 
-    public ConcurrentMessageListenerContainer<String, String> kafkaListenerContainer(String groupId, MessageListener<String, String> listener) {
-        ContainerProperties containerProperties = new ContainerProperties(groupId);
+    public ConcurrentMessageListenerContainer<String, String> kafkaListenerContainer(String groupId, Optional<String> topic, MessageListener<String, String> listener) {
+        ContainerProperties containerProperties = new ContainerProperties(topic.orElse(groupId));
         groupId += new Random().nextInt();
         containerProperties.setMessageListener(listener);
         return new ConcurrentMessageListenerContainer<>(consumerFactory(groupId), containerProperties);

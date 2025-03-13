@@ -17,12 +17,26 @@ function connect() {
         stompClient.subscribe('/topic/message', function(message) {
             try {
                 const jsonObject = JSON.parse(message.body);
-                if (parseInt(userid) === jsonObject.idDestination) {
+                if (parseInt(targetid) === jsonObject.user.idUser) {
                     showMessage(jsonObject, false);
                 } else {
-                    console.log('Received a message ', jsonObject);
-                    console.log(parseInt(targetid));
-                    console.log(jsonObject.idDestination);
+                    alert("alert");
+                }
+            }catch (error) {
+                console.error("Parsing error:", error);
+            }
+        });
+        stompClient.subscribe('/topic/broadcast', function(message) {
+            try {
+                const jsonObject = JSON.parse(message.body);
+                console.log(jsonObject);
+                console.log(parseInt(userid))
+                console.log(parseInt(userid) === jsonObject.user.idUser)
+                if (parseInt(userid) === jsonObject.user.idUser) return;
+                if (parseInt(targetid) === -1) {
+                    showMessage(jsonObject, false);
+                } else {
+                    alert("alert");
                 }
             }catch (error) {
                 console.error("Parsing error:", error);

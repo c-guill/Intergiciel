@@ -17,9 +17,11 @@ public class ProducerService {
     public void sendMessage(Message message) {
         try
         {
+            String topic = message.getIdDestination() == -1 ? "broadcast" : message.getIdDestination().toString();
+            System.out.println(topic);
             ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
             String json = ow.writeValueAsString(message);
-            this.kafkaTemplate.send(message.getIdDestination().toString(), json);
+            this.kafkaTemplate.send(topic, json);
 
         }
         catch (Exception e)
