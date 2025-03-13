@@ -7,29 +7,26 @@ let stompClient = null;
 var userid = getCookie("id")
 var targetid = getCookie("targetid")
 
-let notificationBadge = null; // Définir notificationBadge ici
+// let notificationBadge = null; // Définir notificationBadge ici
 // Fonction qui affiche la notification
 let messageNotification = null;
-function showNotification() {
-    if (!notificationBadge) {
+const notifList = []
+function showNotification(id) {
+    if (!notifList.includes(id)) {
         // Si le badge n'existe pas encore, crée-le
         notificationBadge = document.createElement('div');
-        notificationBadge.id = 'notification-badge';
+        // notificationBadge.id = 'notification-badge';
         notificationBadge.className = 'notification-badge';
         notificationBadge.innerHTML = '🔔'; // Icône de notification
-        // document.body.appendChild(notificationBadge);
-        let idUser = Number(localStorage.getItem("selectedUserId"));
-        const elements = document.querySelectorAll('.contact-information p.bold');
-        for (let i = 0; i < elements.length; i++) {
-            if (i + 1 === idUser) {
-                messageNotification = document.querySelectorAll('.message-notification')[i];
-            }
+        messageNotification = document.getElementById('notification-'+id);
+        if (messageNotification != null) {
+            messageNotification.append(notificationBadge)
+            notifList.push(id)
+            notificationBadge.style.display = 'block';
         }
-        messageNotification.append(notificationBadge)
     }
 
     // On le rend visible
-    notificationBadge.style.display = 'block';
 
 }
 
@@ -46,7 +43,7 @@ function connect() {
                 if (parseInt(targetid) === jsonObject.user.idUser) {
                     showMessage(jsonObject, false);
                 } else {
-                    alert("alert");
+                    showNotification(jsonObject.user.idUser)
                 }
             }catch (error) {
                 console.error("Parsing error:", error);
@@ -62,7 +59,7 @@ function connect() {
                 if (parseInt(targetid) === -1) {
                     showMessage(jsonObject, false);
                 } else {
-                    alert("alert");
+                    showNotification('general')
                 }
             }catch (error) {
                 console.error("Parsing error:", error);

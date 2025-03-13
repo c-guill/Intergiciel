@@ -32,7 +32,7 @@
                         <p class="bold">Général</p>
                         <p>05/12</p>
                     </div>
-                    <div><p class="text-truncate" style="font-size: 0.8em; color: rgba(255, 255, 255, 0.5);">Derniers
+                    <div id="notification-general" class="message-notification" style="display: flex"><p class="text-truncate" style="font-size: 0.8em; color: rgba(255, 255, 255, 0.5);">Derniers
                         messages ici</p></div>
                 </div>
                 <!-- Séparateur "Channels privés" -->
@@ -50,7 +50,7 @@
                         </div>
                         <p class="contact-date" th:text="${#dates.format(contact.date, 'dd/MM HH:mm')}"></p>
                     </div>
-                    <div class="message-notification" style="display: flex">
+                    <div th:id="'notification-' + ${contact.id}" class="message-notification" style="display: flex">
                         <p class="text-truncate" th:text="${contact.lastMessage}"></p>
                     </div>
                 </div>
