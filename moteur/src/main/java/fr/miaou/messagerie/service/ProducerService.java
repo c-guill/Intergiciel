@@ -11,25 +11,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProducerService {
 
-    @Value("${application.topic}")
-    private String TOPIC;
-
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
     public void sendMessage(Message message) {
-        //logger.info(String.format("#### -> Producing message -> %s", message));
         try
         {
             ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
             String json = ow.writeValueAsString(message);
-            System.out.println("Sending message: " + json);
-            this.kafkaTemplate.send(TOPIC, json);
+            this.kafkaTemplate.send(message.getIdDestination().toString(), json);
 
         }
         catch (Exception e)
         {
-//            logger.info(String.format("#### -> Error sending message -> %s", message));
+            System.err.println("Error while sending message: " + e.getMessage());
         }
     }
 }
