@@ -90,4 +90,24 @@ public class ApiService {
         }
     }
 
+    public Message sendMessage(String message, Contact user, Contact contact) throws Exception {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/x-www-form-urlencoded");
+
+        String body = "userId=" + user.getId() + "&contenu=" + message + "&idDestination=" + contact.getId();
+        HttpEntity<String> requestEntity = new HttpEntity<>(body, headers);
+        ResponseEntity<String> response = restTemplate.exchange(
+                this.api + "/message",
+                HttpMethod.POST,
+                requestEntity,
+                String.class);
+        if (response.getStatusCode() == HttpStatus.OK) {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode rootNode = mapper.readTree(response.getBody());
+            return this.getMessageFromJson(rootNode, user, contact);
+        } else {
+            throw new RuntimeException("Error: " + response.getStatusCode());
+        }
+    }
+
 }

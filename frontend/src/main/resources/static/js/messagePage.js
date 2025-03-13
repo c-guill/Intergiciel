@@ -4,27 +4,39 @@ chat.scrollTo(0, chat.scrollHeight);
 
 let stompClient = null;
 
-function connect() {
-    var userid = getCookie("id")
-    if (userid == null || userid === "-1") return;
-    const socket = new SockJS('http://localhost:8080/ws'); // Change the URL to your WebSocket endpoint
-    stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
-        stompClient.subscribe('/all/messages', function (response) {
-            message = JSON.parse(response.body);
-            if (message.idDestination === parseInt(userid)) {
-                showMessage(message, false)
-            }
+var userid = getCookie("id")
+var targetid = getCookie("targetid")
 
+function connect() {
+    const socket = new SockJS('/ws');
+    stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function(frame) {
+        console.log('Connecté: ' + frame);
+
+        stompClient.subscribe('/topic/message', function(message) {
+            try {
+                const jsonObject = JSON.parse(message.body);
+                if (parseInt(userid) === jsonObject.idDestination) {
+                    showMessage(jsonObject, false);
+                } else {
+                    console.log('Received a message ', jsonObject);
+                    console.log(parseInt(targetid));
+                    console.log(jsonObject.idDestination);
+                }
+            }catch (error) {
+                console.error("Parsing error:", error);
+            }
         });
     });
 }
+
 
 function showMessage(message, selfMessage) {
     if (selfMessage) {
         chat.insertAdjacentHTML('beforeend',
             "<div class='d-flex flex-column justify-content-end align-items-end'>" +
-            "<label class='label-message'>"+message.senderusername + " - "+ message.date +"</label>" +
+            "<label class='label-message'>"+message.sender.username + " - "+ message.date +"</label>" +
             "<p class='message message-moi'>"+message.message+"</p>");
         chat.scrollTo(0, chat.scrollHeight);
     } else {
@@ -49,13 +61,18 @@ function sendMessage() {
         return
     }
     messageElement.value = '';
-    var userid = getCookie("id")
-    if (userid == null || userid === "-1") return;
-    var username = getCookie("username")
-    var targetid = getCookie("targetid")
-    const message = {'senderusername':username, 'senderid': userid, 'targetid': targetid, 'message':messageText, 'date':formatDate(new Date())};
-    showMessage(message, true);
-    stompClient.send("/app/application", {}, JSON.stringify(message));
+    $.ajax({
+        type: "POST",
+        url: "/sendmessage",
+        data: {message: messageText},
+        success: function (response) {
+            showMessage(response, true);
+
+        },
+        error: function() {
+            alert("Error with the server, please contact an administrator.");
+        }
+    });
 
 }
 

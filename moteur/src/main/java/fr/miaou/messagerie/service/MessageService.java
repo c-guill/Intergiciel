@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @Service
 public class MessageService {
+
     @Autowired
     private MessageRepository messageRepository;
 
@@ -23,41 +24,16 @@ public class MessageService {
     @Autowired
     private ProducerService producerService;
 
-    public List<Message> getAllMessages() {
-        return messageRepository.findAll();
-    }
-
-    // Récupérer un message par son ID
-    public Optional<Message> getMessageById(Long id) {
-        return messageRepository.findById(id);
-    }
-
-    // Ajouter un nouveau message
-    public Message createMessage(Message message) {
-//        System.err.println(userId + contenu + idDestination);
-//        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-//        Message message = messageRepository.save(Message.builder()
-//                .user(user)
-//                .idDestination(idDestination)
-//                .contenu(contenu)
-//                .date(new Timestamp(System.currentTimeMillis()))
-//                .build());
-//        this.producerService.sendMessage(message);
-        return this.messageRepository.save(message);
-    }
-
-    // Supprimer un message par son ID
-    public void deleteMessage(Long id) {
-        messageRepository.deleteById(id);
-    }
-
-    // Mettre à jour un message existant
-    public Message updateMessage(Message messageDetails) {
-        return messageRepository.findById(messageDetails.getIdMessage()).map(message -> {
-            message.setContenu(messageDetails.getContenu());
-            message.setDate(messageDetails.getDate());
-            return messageRepository.save(message);
-        }).orElseThrow(() -> new RuntimeException("Message non trouvé"));
+    public Message createMessage(Long userId, String contenu, Long idDestination) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Message message = this.messageRepository.save(messageRepository.save(Message.builder()
+                .user(user)
+                .idDestination(idDestination)
+                .contenu(contenu)
+                .date(new Timestamp(System.currentTimeMillis()))
+                .build()));
+        this.producerService.sendMessage(message);
+        return message;
     }
 
     public List<Message> getMessageByDiscussion(Long idUser, Long idDestination) {
