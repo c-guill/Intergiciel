@@ -1,7 +1,6 @@
 package fr.miaou.messagerie.controller;
 
 import fr.miaou.messagerie.model.Contact;
-import fr.miaou.messagerie.model.User;
 import fr.miaou.messagerie.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

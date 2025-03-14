@@ -1,7 +1,5 @@
 package fr.miaou.frontend.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.sql.Timestamp;
@@ -18,9 +16,8 @@ public class Contact {
     public String username;
     public String lastMessage;
     public String date;
-    public Status status;
 
-    public Contact(Long id, String username, String lastMessage, Timestamp timestamp, Status status) {
+    public Contact(Long id, String username, String lastMessage, Timestamp timestamp) {
         this.id = id;
         this.username = username;
         this.lastMessage = lastMessage;
@@ -28,7 +25,6 @@ public class Contact {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
             this.date = timestamp.toLocalDateTime().format(formatter);
         }
-        this.status = status;
     }
 
     public Contact(Long id, String username) {

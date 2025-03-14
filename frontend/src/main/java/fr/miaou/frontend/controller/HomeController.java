@@ -2,7 +2,6 @@ package fr.miaou.frontend.controller;
 
 import fr.miaou.frontend.model.Contact;
 import fr.miaou.frontend.model.Message;
-import fr.miaou.frontend.model.Status;
 import fr.miaou.frontend.service.ApiService;
 import fr.miaou.frontend.service.KafkaDynamicConsumerService;
 import jakarta.servlet.http.Cookie;
@@ -10,7 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -55,7 +53,7 @@ public class HomeController {
                 return "redirect:/";
             }
             this.kafkaDynamicConsumerService.startListening(useridstr);
-            Contact garfield = new Contact(userid, username, null, null, Status.AVAILABLE);
+            Contact garfield = new Contact(userid, username, null, null);
             List<Contact> contacts = this.apiService.getContacts(garfield);
             Optional<Contact> target;
             if (targetid == 0) {
@@ -98,9 +96,6 @@ public class HomeController {
         }
     }
     
-//    @PostMapping("/disconnect")
-//    public boolean
-
     @DeleteMapping("/disconnect")
     @ResponseBody
     public void disconnect() {

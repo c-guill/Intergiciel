@@ -1,5 +1,5 @@
 const chat = document.getElementById('chat');
-const contact = document.getElementById('contact-list');
+const contactdiv = document.getElementById('contact-list');
 
 chat.scrollTo(0, chat.scrollHeight);
 
@@ -40,7 +40,6 @@ function showNotification(id) {
         stompClient = Stomp.over(socket);
 
         stompClient.connect({}, function (frame) {
-            console.log('Connecté: ' + frame);
 
             stompClient.subscribe('/topic/message', function (message) {
                 try {
@@ -57,9 +56,6 @@ function showNotification(id) {
             stompClient.subscribe('/topic/broadcast', function (message) {
                 try {
                     const jsonObject = JSON.parse(message.body);
-                    console.log(jsonObject);
-                    console.log(parseInt(userid))
-                    console.log(parseInt(userid) === jsonObject.user.idUser)
                     if (parseInt(userid) === jsonObject.user.idUser) return;
                     if (parseInt(targetid) === -1) {
                         showMessage(jsonObject, false);
@@ -71,11 +67,9 @@ function showNotification(id) {
                 }
             });
             stompClient.subscribe('/topic/manageuser', function (message) {
+                message = message.body;
                 try {
-                    const message = message+"";
-                    console.log("ca:"+message)
                     if(message.startsWith("add")) {
-                        console.log("add")
                         const contact = message.split("$")[1]
                         addUser(JSON.parse(contact));
                     } else if (message.startsWith("remove")) {
@@ -92,12 +86,9 @@ function showNotification(id) {
 
     function addUser(contact) {
         cid = contact.id ?? '';
-        if (cid === userid+'') return;
+        if (cid == userid) return;
         cusername = contact.username ?? '';
-        clastmessage = contact.lastMessage ?? '';
-        cdateuser = contact.date ?? '';//#dates.format(contact.date, 'dd/MM HH:mm')
-        console.log("la")
-        contact.insertAdjacentHTML('beforeend',"<div class='contact-information' onclick='changeUser("+cid+")'> id='contact-online-'" +
+        contactdiv.insertAdjacentHTML('beforeend',"<div class='contact-information' onclick='changeUser("+cid+")' id='contact-online-"+cid +"'>"+
         "<div class='d-flex justify-content-between align-items-center'>" +
         "<div class='user row'>" +
         "<p class='bold'>      "+cusername+"</p>" +
@@ -105,18 +96,22 @@ function showNotification(id) {
         "</div>" +
         "<span class='notification-badge' style='display: none;'></span>" +
         "</div>" +
-        "<p class='contact-date' >"+cdateuser+"</p>" +
+        "<p class='contact-date' ></p>" +
         "</div>" +
-        "<div id='notifications-contact.id' class='message-notification' style='display: flex'>" +
-        "<p class='text-truncate' >"+clastmessage+"</p>" +
+        "<div id='notifications-'"+cid+" class='message-notification' style='display: flex'>" +
+        "<p class='text-truncate' ></p>" +
         "</div>" +
         "</div>");
     }
 
     function removeUser(id) {
-        console.log(id)
-        // const div = document.getElementById("contact-online-"+id);
-        // div.remove();
+        const div = document.getElementById("contact-online-"+id);
+        if(div !=null){
+            div.remove();
+            if (targetid == id) {
+                window.location.href = '/message/' + 0;
+            }
+        }
     }
 
 

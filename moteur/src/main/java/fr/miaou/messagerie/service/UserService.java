@@ -59,17 +59,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updateUser(User userDetails) {
-        return userRepository.findById(userDetails.getIdUser()).map(user -> {
-            user.setNom(userDetails.getNom());
-            return userRepository.save(user);
-        }).orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
-    }
-
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
-    }
-
     public Contact getcontactByUsername(String username) {
         Optional<User> user = this.userRepository.getUserByNom(username);
 
