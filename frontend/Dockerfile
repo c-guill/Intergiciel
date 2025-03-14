@@ -1,14 +1,25 @@
-# Étape 1 : Construire l'application
-FROM maven:3.8.4-openjdk-11 AS build
-WORKDIR /app
+# Étape de build Maven
+FROM maven:3.8.6-eclipse-temurin-17 AS build
+
+WORKDIR /fronted
+
+# Copie pom.xml + téléchargement des dépendances en cache
 COPY pom.xml .
-COPY src ./src
-RUN mvn clean package
 
-# Étape 2 : Créer l'image de l'application
-FROM openjdk:11-jre-slim
-WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
+RUN mvn dependency:go-offline
 
-# Commande pour lancer l'application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Copier tout le projet (src + pom.xml)
+COPY . .
+
+# Compiler et packager le projet sans les tests
+RUN mvn clean package -DskipTests
+
+# Étape d'exécution
+FROM eclipse-temurin:17-jre-alpine
+
+WORKDIR /fronted
+
+# Copier le jar généré depuis l'étape BUILD
+COPY --from=build /fronted/target/*.jar fronted.jar
+
+ENTRYPOINT ["java", "-jar", "fronted.jar"]

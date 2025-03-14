@@ -22,20 +22,4 @@ WORKDIR /moteur
 # Copier le jar généré depuis l'étape BUILD
 COPY --from=build /moteur/target/*.jar moteur.jar
 
-EXPOSE 8080
-
 ENTRYPOINT ["java", "-jar", "moteur.jar"]
-#FROM maven:3.9.9-eclipse-temurin-11 AS BUILD
-#
-#WORKDIR /moteur
-#COPY pom.xml .
-#COPY src ./src
-#RUN mvn clean package
-#
-#FROM openjdk:25-jdk-slim
-#WORKDIR /moteur
-#COPY --from=build /moteur/target/*.jar moteur.jar
-#
-#EXPOSE 8080
-#
-#ENTRYPOINT ["java","-jar", "moteur.jar"]

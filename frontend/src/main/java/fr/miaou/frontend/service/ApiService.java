@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.miaou.frontend.model.Contact;
 import fr.miaou.frontend.model.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -23,7 +24,8 @@ public class ApiService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private final String api = "http://localhost:8080/"; // Replace with your API URL
+    @Value("${MOTEUR_URL:http://localhost:8080/}")
+    private String api;
 
 
     public Message getMessageFromJson(JsonNode node, Contact user, Contact contact) {

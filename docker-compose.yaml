@@ -1,4 +1,6 @@
 services:
+
+  # Postgres database
   postgres:
     image: 'postgres:latest'
     environment:
@@ -7,11 +9,13 @@ services:
       - 'POSTGRES_USER=admin'
       - 'POSTGRES_HOST_AUTH_METHOD=trust'
     ports:
-      - 5435:5432/tcp
+      - "5435:5432/tcp"
     expose:
       - 5432
     volumes:
       - "./pgdata:/var/lib/postgresql/data"
+
+  # Kafka
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     hostname: zookeeper
@@ -21,6 +25,7 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+
   broker:
     image: confluentinc/cp-kafka:latest
     hostname: broker
@@ -41,22 +46,55 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_JMX_PORT: 9101
+
+  # Moteur Api
   moteur:
     image: moteur
     build:
-      context: .
+      context: ./moteur
       dockerfile: Dockerfile
+    container_name: moteur
+    restart: always
     ports:
       - "8080:8080"
     depends_on:
-      - zookeeper
-      - broker
       - postgres
-    networks:
-      - backend
     environment:
-      - server.port=8080
+      - SERVER_PORT=8080
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/meow
+      - SPRING_KAFKA_BOOTSTRAP-SERVERS=broker:29092
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=password1234
 
-networks:
-  backend:
-    driver: bridge
+  # Frontend
+  client1:
+    image: front
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: client1
+    restart: always
+    ports:
+      - "8081:8081"
+    depends_on:
+      - moteur
+    environment:
+      - SERVER_PORT=8081
+      - MOTEUR_URL=http://moteur:8080/
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=broker:29092
+
+  client2:
+    image: front
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: client2
+    restart: always
+    ports:
+      - "8082:8082"
+    depends_on:
+      - moteur
+    environment:
+      - SERVER_PORT=8082
+      - MOTEUR_URL=http://moteur:8080/
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=broker:29092
