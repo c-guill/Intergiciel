@@ -19,8 +19,6 @@ Actuellement docker lance 2 le frontend sur 2 ports (8081 et 8082). Pour tester 
 
 Pour se connecter en mode privé / broadcast, il ne faut rentrer aucun utilisateur dans le login sur la page d'accueil.
 
-On n'a pas eu le temps d'implémenter la possibilité de lister les utilisateurs connectés, le début de l'implémentation se trouve dans la branche "online".
-
 ## Prérequis
 - Docker Desktop
 
