@@ -41,3 +41,22 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_JMX_PORT: 9101
+  moteur:
+    image: moteur
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - zookeeper
+      - broker
+      - postgres
+    networks:
+      - backend
+    environment:
+      - server.port=8080
+
+networks:
+  backend:
+    driver: bridge
