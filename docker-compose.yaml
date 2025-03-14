@@ -49,7 +49,6 @@ services:
 
   # Moteur Api
   moteur:
-    image: moteur
     build:
       context: ./moteur
       dockerfile: Dockerfile
@@ -68,7 +67,6 @@ services:
 
   # Frontend
   client1:
-    image: front
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -84,7 +82,6 @@ services:
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=broker:29092
 
   client2:
-    image: front
     build:
       context: ./frontend
       dockerfile: Dockerfile
