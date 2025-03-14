@@ -1,142 +1,313 @@
-.contact-section {
-  background-color: #1F1F2DFF;
-  border-right: 2px solid #5d5d85;
+/* --- GLOBAL --- */
+body {
+  background: linear-gradient(135deg, #2a2a2a, #3e193f); /* Dégradé violet */
+  color: #e0e0e0;
+  font-family: 'Arial', sans-serif;
   margin: 0;
-  padding: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-
-
+/* --- LAYOUT PRINCIPAL --- */
 .app {
+  display: flex;
   width: 100vw;
   height: 100vh;
-  position: relative;
+  border-radius: 0; /* Retirer les bords arrondis */
+  overflow: hidden;
+  flex-direction: row;
 }
 
+/* --- SECTION CONTACTS (CHANNELS) --- */
+.contact-section {
+  width: 280px;
+  background: linear-gradient(135deg, #2a2a2a, #3e193f); /* Dégradé violet */
+  padding: 25px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Occuper tout l'écran */
+
+  align-items: center;
+  border-right: 1px solid #444; /* Bordure pour séparer la section contacts */
+  transition: width 0.2s ease; /* Transition douce pour le redimensionnement */
+}
+
+/* Titre et message de bienvenue */
+.user-title {
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.welcome-message {
+  font-size: 14px;
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+
+/* --- SUPPRESSION DU CONTENEUR DES CHANNELS --- */
+.contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-top: 15px;
+  background: none; /* Supprime le fond du conteneur */
+  border: none; /* Supprime toute bordure */
+  padding: 0; /* Enlève tout padding superflu */
+}
+
+/* Chaque channel doit apparaître comme un simple bouton */
+.contact-information {
+  padding: 12px;
+  background: transparent; /* Supprime le fond */
+  border-radius: 0;
+  cursor: pointer;
+  transition: background 0.3s;
+  text-indent: 20px;
+  text-align: center;
+  color: #e0e0e0;
+  font-size: 1em;
+}
+
+/* Effet au survol */
+.contact-information:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.channel-divider {
+  text-align: center;
+  font-weight: normal;
+  text-transform: uppercase;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9em;
+}
+
+
+
+/* --- LE CONTENEUR DE DISCUSSION N'APPARAÎT QUE SI UN CHANNEL EST ACTIF --- */
 .conversation-section {
-  background-color: #1f1f1f;
-  padding: 0;
-  margin: 0;
+  flex-grow: 1;
+  background: rgba(0, 0, 0, 0.3); /* Fond sombre, mais reste fluide */
+  display: flex;
+  flex-direction: column;
+  border-radius: 0;
+  overflow: hidden;
+  text-align:center;
+
 }
 
+/* Quand un channel est actif, on affiche la conversation */
+.conversation-section.active {
+  display: flex;
+}
+
+
+/* Infos en haut de la conversation */
 .conversation-information {
-  position: static;
-  top: 0;
-  height: 45px;
-  width: 100%;
-  margin: 5px;
-  border-bottom: 1px solid #111111;
- }
-
-.conversation {
-  position: static;
-  height: calc(100vh - 50px - 95px);
-  width: 100%;
-  overflow: auto;
-  padding-left: 30px;
-  padding-right: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.3); /* Arrière-plan léger */
+  border-bottom: 1px solid #5d5d85;
 }
 
-.conversation-form {
-  position: static;
-  margin: 20px;
-  width: 100%;
-  height: 45px;
+/* Zone des messages */
+.conversation {
+  flex-grow: 1;
+  padding: 15px;
+  overflow-y: auto;
+  background: transparent; /* Rendre l'arrière-plan totalement transparent pour un effet de fond unifié */
+  min-height: 60vh; /* Minimum height pour s'assurer qu'il occupe une certaine hauteur */
+
+}
+
+/* Style des messages */
+.message-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  max-width: 70%;
+}
+
+.moi {
+  align-self: flex-end;
+}
+
+.lui {
+  align-self: flex-start;
 }
 
 .message {
-  padding: 5px;
-  max-width: 70%;
-  width: fit-content;
-}
-
-.message-lui {
-  background-color: #353535;
-  border: 5px #353535 solid;
-  border-radius: 2px;
+  padding: 10px;
+  border-radius: 8px;
+  word-wrap: break-word;
 }
 
 .message-moi {
-  background-color: #5d5d85;
-  border: 2px #5d5d85 solid;
-  border-radius: 5px;
+  background-color: #6a4c9c; /* Couleur des messages envoyés, dans la gamme violet */
+  color: white;
 }
 
-.label-message {
-  font-size: 13px;
-  margin: 0 5px;
+.message-lui {
+  background-color: #444; /* Couleur des messages reçus */
+  color: white;
 }
 
-.contact {
-  width: 100%;
+/* --- ZONE D'ENVOI DE MESSAGE --- */
+.conversation-form {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.3) !important; /* Fond de la zone de saisie des messages */
+  border-top: 1px solid #5d5d85;
+
+
+
 }
-
-.contact-information {
-  width: calc(100% - 30px);
-  height: 60px;
-  padding: 0 5px;
-  margin: 5px 10px;
-}
-
-.contact-information:hover {
-  background-color: #353535;
-  border: 1px solid #4e4e4e;
-  border-radius: 5px;
-
+.message-sender {
+  color: white !important;
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #5d5d85;
+  background: #2a2a2a !important;
 }
 
 .btn-send {
-  background-color: #1E1E1E;
-  width: 50px;
-  color: #fafafa;
-  /*margin-top: 5px;*/
-  height: 100%;
-  border: 1px solid #5d5d85;
-  border-left: none;
-
+  background: rgba(93, 51, 128, 0);
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  margin-left: 5px;
 }
 
-button {
-  width: 20px;
-}
-
-.message-sender {
-  background-color: #1E1E1E;
-  color: #fafafa;
-  border: 1px solid #5d5d85;
-  border-right: none;
-  height: 100%;
+.btn-send:hover {
+  background: #ff6b81; /* Survol plus clair pour le bouton d'envoi */
 }
 
 .btn-disconnect {
-  width: 100px;
+  background: #d9534f;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px;
 }
 
-.message-sender:focus {
-  background-color: #1E1E1E !important;
-  color: #fafafa !important;
-  border: 1px solid #5d5d85 !important;
-  border-right: none !important;
-  height: 100% !important;
-  box-shadow: none !important;
+.btn-disconnect:hover {
+  background: #ff6b81; /* Survol pour le bouton de déconnexion */
+}
+
+/* --- Stylisation de la date du dernier message dans la liste des contacts --- */
+.contact-date {
+  font-size: 0.8em;
+  font-family: 'Courier New', Courier, monospace; /* Police discrète */
+  color: rgba(255, 255, 255, 0.5); /* Couleur atténuée */
+
+}
+
+/* Contact sélectionné - Ajout d'un effet visuel */
+.selected-contact {
+  background: rgba(165, 70, 171, 0.2); /* Fond légèrement plus clair */
+  border-left: 3px solid #6a4c9c; /* Bordure violette pour l'effet de sélection */
+  font-weight: bold; /* Texte légèrement plus visible */
+  transition: all 0.2s ease-in-out; /* Animation fluide */
+}
+/* Style du badge de notification  */
+.new-message-badge {
+  font-size: 14px;
+  color: red;
+  margin-left: 8px;
+  font-weight: bold;
+  display: inline-block;
 }
 
 
-.available{
-  background: #40d70e;
-  border-radius:50%;
-  width:10px;
-  height:10px;
+
+/* --- Responsive : Met la date en-dessous du nom sur petits écrans --- */
+@media (max-width: 768px) {
+
+  .contact-date {
+    margin-top: 3px;
+    display: block; /* Force le retour à la ligne */
+    font-size: 0.7em; /* Encore plus discret sur mobile */
+  }
+}
+#toggle-contacts {
+  display: none;
+}
+/* L'afficher uniquement en mode mobile */
+@media (max-width: 1024px) {
+  #toggle-contacts {
+    display: block;
+    position: fixed;
+    align-items: center;
+    top: 20px;
+    right: 200px;
+    background: #6a4c9c;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    z-index: 100;    font-size: 14px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Légère ombre pour visibilité */
+  }
+
+  #toggle-contacts:hover {
+    background: #7d5fb2; /* Effet au survol */
+  } }
+/* --- RESPONSIVE --- */
+@media (max-width: 1024px) {
+  .app {
+    flex-direction: column; /* Passage en colonne sur les écrans moyens */
+    position: relative;
+    width : 100vw;
+  }
+
+  .contact-section {
+    width: 100%; /* Prendre toute la largeur */
+    border-radius: 15px 15px 0 0;
+    padding: 20px;
+    display: none !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: linear-gradient(135deg, #2a2a2a, #3e193f);
+    height: 100%;
+    z-index: 10;
+  }
+
+  .conversation-section {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width : 100%;
+    max-width: 100vw;
+  }
+  .conversation {
+    flex-grow: 1;
+  }
+  .conversation-form {
+    position: relative;
+  }
+
+  /* Quand la classe "show-contacts" est activée, on affiche la liste */
+  .app.show-contacts .contact-section {
+    display: flex !important;
+  }
+
+  /* Et on masque la conversation */
+  .app.show-contacts .conversation-section {
+    display: none !important;
+  }
+
+
 }
 
-.absent{
-  background: #d75b0e;
-  border-radius:50%;
-  width:10px;
-  height:10px;
-}
 
-.user {
-  margin: 0;
-}
 
