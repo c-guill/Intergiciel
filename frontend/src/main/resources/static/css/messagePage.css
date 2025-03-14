@@ -97,6 +97,7 @@ body {
   border-radius: 0;
   overflow: hidden;
   text-align:center;
+  padding: 0;
 
 }
 
@@ -120,12 +121,11 @@ body {
 /* Zone des messages */
 .conversation {
   flex-grow: 1;
-  padding: 15px;
   overflow-y: auto;
   background: transparent; /* Rendre l'arrière-plan totalement transparent pour un effet de fond unifié */
   min-height: 60vh; /* Minimum height pour s'assurer qu'il occupe une certaine hauteur */
-  max-height: calc(100vh - 50px - 95px);
-
+  max-height: calc(100vh - 50px - 50px);
+  padding: 0 40px;
 }
 
 /* Style des messages */
@@ -311,6 +311,5 @@ body {
 
 
 }
-
 
 
