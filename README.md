@@ -15,11 +15,12 @@ Guarim Raphael 22304361
 ## Description
 Ce projet est une application de messagerie en temps réel basée sur Spring Boot, avec un frontend en Thymeleaf et une base de données PostgreSQL. Il utilise Apache Kafka pour assurer une communication asynchrone et scalable entre les utilisateurs
 
+Actuellement docker lance 2 le frontend sur 2 ports (8081 et 8082). Pour tester l'envoie des messages entre 2 chat, il faut lancer les 2 instances sur 2 navigateurs diffrents ou en navigation privée (en raison des cookies)
+
+Pour se connecter en mode privé / broadcast, il ne faut rentrer aucun utilisateur dans le login sur la page d'accueil
+
 ## Prérequis
 - Docker Desktop
-- Java 17 ou supérieur
-- Maven (ou utiliser ./mvnw)
-- IntelliJ IDEA (recommandé)
 
 ## Installation et Configuration
 
