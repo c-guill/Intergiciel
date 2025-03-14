@@ -17,4 +17,8 @@ public class WebSocketService {
     public void sendMessageBroadcast(String message) {
         this.template.convertAndSend("/topic/broadcast", message);
     }
+
+    public void manageUser(String value) {
+        this.template.convertAndSend("/topic/manageuser", value);
+    }
 }

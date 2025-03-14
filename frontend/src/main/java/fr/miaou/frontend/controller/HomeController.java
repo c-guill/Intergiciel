@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -96,6 +97,9 @@ public class HomeController {
             return false;
         }
     }
+    
+//    @PostMapping("/disconnect")
+//    public boolean
 
     @DeleteMapping("/disconnect")
     @ResponseBody

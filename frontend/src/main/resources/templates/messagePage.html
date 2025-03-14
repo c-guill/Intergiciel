@@ -44,7 +44,7 @@
                 </div>
                 <div th:if="${userid} != -1" th:each="contact: ${contacts}" class="contact-information"
                      th:classappend="${selectedUserId == contact.id} ? 'selected-contact'"
-                     th:attr="onclick=|changeUser('${contact.id}')|">
+                     th:attr="onclick=|changeUser('${contact.id}')|" th:id="'contact-online-' + ${contact.id}">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="user row">
                             <p class="bold" th:text=" '      ' + ${contact.username}"></p>

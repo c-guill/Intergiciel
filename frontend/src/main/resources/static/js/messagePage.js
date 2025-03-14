@@ -1,4 +1,5 @@
 const chat = document.getElementById('chat');
+const contact = document.getElementById('contact-list');
 
 chat.scrollTo(0, chat.scrollHeight);
 
@@ -69,7 +70,53 @@ function showNotification(id) {
                     console.error("Parsing error:", error);
                 }
             });
+            stompClient.subscribe('/topic/manageuser', function (message) {
+                try {
+                    const message = message+"";
+                    console.log("ca:"+message)
+                    if(message.startsWith("add")) {
+                        console.log("add")
+                        const contact = message.split("$")[1]
+                        addUser(JSON.parse(contact));
+                    } else if (message.startsWith("remove")) {
+                        const id = parseInt(message.split("$")[1])
+                        removeUser(id)
+
+                    }
+                } catch (error) {
+                }
+            });
+            stompClient.send("/app/addUser",{},userid);
         });
+    }
+
+    function addUser(contact) {
+        cid = contact.id ?? '';
+        if (cid === userid+'') return;
+        cusername = contact.username ?? '';
+        clastmessage = contact.lastMessage ?? '';
+        cdateuser = contact.date ?? '';//#dates.format(contact.date, 'dd/MM HH:mm')
+        console.log("la")
+        contact.insertAdjacentHTML('beforeend',"<div class='contact-information' onclick='changeUser("+cid+")'> id='contact-online-'" +
+        "<div class='d-flex justify-content-between align-items-center'>" +
+        "<div class='user row'>" +
+        "<p class='bold'>      "+cusername+"</p>" +
+        "<div class='available'>" +
+        "</div>" +
+        "<span class='notification-badge' style='display: none;'></span>" +
+        "</div>" +
+        "<p class='contact-date' >"+cdateuser+"</p>" +
+        "</div>" +
+        "<div id='notifications-contact.id' class='message-notification' style='display: flex'>" +
+        "<p class='text-truncate' >"+clastmessage+"</p>" +
+        "</div>" +
+        "</div>");
+    }
+
+    function removeUser(id) {
+        console.log(id)
+        // const div = document.getElementById("contact-online-"+id);
+        // div.remove();
     }
 
 
@@ -200,9 +247,5 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
-
-
-
-
 window.onload = connect;
+

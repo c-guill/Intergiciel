@@ -39,4 +39,14 @@ public class UserController {
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
     }
+
+    @PostMapping("/connection")
+    public void connectUser(@RequestParam Long id) {
+        this.userService.connectUser(id);
+    }
+
+    @PostMapping("/disconnect")
+    public void disconnectUser(@RequestParam Long id) {
+        this.userService.disconnectUser(id);
+    }
 }
