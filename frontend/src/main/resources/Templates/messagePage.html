@@ -15,6 +15,9 @@
     <div class="app row align-item-start">
         <!-- Section des contacts -->
         <div class="contact-section col-md-3 col-sm-12 d-flex flex-column align-items-center">
+
+
+
             <!-- Nom d'utilisateur bien visible -->
             <div class="username text-center">
                 <h2 class="user-title" th:text="${username}"></h2>
@@ -24,10 +27,10 @@
             <div class="welcome-message text-center">
                 <p>Bienvenue sur Mewling Chat, <span th:text="${username}"></span> !</p>
             </div>
-
             <!-- Conteneur des channels -->
             <div class="contact-list">
                 <div onclick="changeUser(0)" class="contact-information">
+
                     <div class="d-flex justify-content-between align-items-center">
                         <p class="bold">Général</p>
                         <p>05/12</p>
@@ -59,10 +62,17 @@
 
         <!-- Section de conversation -->
         <div class="conversation-section col-md-9 col-sm-12">
+
             <div class="conversation-information d-flex justify-content-between align-items-center">
+                <!-- Bouton pour ouvrir la liste des contacts en mode mobile -->
                 <h3 th:text="${targetusername}"></h3>
                 <button onclick="disconnect();" class="btn btn-main btn-disconnect">Déconnexion</button>
             </div>
+            <button id="toggle-contacts">☰</button>
+
+
+
+
             <div id="chat" class="conversation">
                 <div th:each="message: ${messages}">
                     <div th:if="${message.sender.username == username}" class="d-flex flex-column align-items-end">
