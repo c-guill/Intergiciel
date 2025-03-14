@@ -98,7 +98,7 @@ function showNotification(id) {
         "</div>" +
         "<p class='contact-date' ></p>" +
         "</div>" +
-        "<div id='notifications-'"+cid+" class='message-notification' style='display: flex'>" +
+        "<div id='notification-"+cid+"' class='message-notification' style='display: flex'>" +
         "<p class='text-truncate' ></p>" +
         "</div>" +
         "</div>");
