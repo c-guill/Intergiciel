@@ -1,6 +1,5 @@
 function submitData() {
     var username = $('#username').val();
-    // var hiddenData = 'internalValue'; // Set your internal data here
 
     $.ajax({
         type: "POST",

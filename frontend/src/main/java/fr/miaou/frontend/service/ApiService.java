@@ -1,7 +1,5 @@
 package fr.miaou.frontend.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.miaou.frontend.model.Contact;
@@ -17,6 +15,8 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Service
 public class ApiService {
@@ -26,6 +26,8 @@ public class ApiService {
 
     @Value("${MOTEUR_URL:http://localhost:8080/}")
     private String api;
+
+    private int connections = 0;
 
 
     public Message getMessageFromJson(JsonNode node, Contact user, Contact contact) {
@@ -112,4 +114,45 @@ public class ApiService {
         }
     }
 
+    public void connection(String id) {
+        if(connections == 0) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Content-Type", "application/x-www-form-urlencoded");
+
+            String body = "id="+id;
+            HttpEntity<String> requestEntity = new HttpEntity<>(body, headers);
+            ResponseEntity<String> response = restTemplate.exchange(
+                    api + "users/connection",
+                    HttpMethod.POST,
+                    requestEntity,
+                    String.class);
+        }
+        connections++;
+    }
+
+    public void disconnection(String id) {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                connections--;
+                if (connections == 0) {
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.set("Content-Type", "application/x-www-form-urlencoded");
+
+                    String body = "id="+id;
+                    HttpEntity<String> requestEntity = new HttpEntity<>(body, headers);
+                    ResponseEntity<String> response = restTemplate.exchange(
+                            api + "users/disconnect",
+                            HttpMethod.POST,
+                            requestEntity,
+                            String.class);
+
+                }
+                timer.cancel();
+            }
+        }, 1000);
+
+
+    }
 }

@@ -16,7 +16,6 @@ public class Contact {
     public String username;
     public String lastMessage;
     public String date;
-//    public Status status;
 
 
     public Contact(Long id, String username, String lastMessage, String date) {

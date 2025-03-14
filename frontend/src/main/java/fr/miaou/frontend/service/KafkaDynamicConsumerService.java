@@ -17,6 +17,7 @@ public class KafkaDynamicConsumerService {
 
     private ConcurrentMessageListenerContainer<String, String> privateContainer;
     private ConcurrentMessageListenerContainer<String, String> broadcastContainer;
+    private ConcurrentMessageListenerContainer<String, String> userContainer;
 
     @Autowired
     private WebSocketService webSocketService;
@@ -36,12 +37,24 @@ public class KafkaDynamicConsumerService {
             };
             broadcastContainer = kafkaDynamicConsumerConfig.kafkaListenerContainer(groupId, Optional.of("broadcast"), listener);
         }
+
+        if (userContainer == null) {
+            MessageListener<String, String> listener = record -> {
+                this.webSocketService.manageUser(record.value());
+            };
+            userContainer = kafkaDynamicConsumerConfig.kafkaListenerContainer(groupId, Optional.of("user-status"), listener);
+        }
+
         if (!broadcastContainer.isRunning()) {
             broadcastContainer.start();
         }
 
         if (!privateContainer.isRunning()) {
             privateContainer.start();
+        }
+
+        if (!userContainer.isRunning()) {
+            userContainer.start();
         }
     }
 

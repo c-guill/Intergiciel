@@ -25,18 +25,13 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    @PostMapping("/connection")
+    public void connectUser(@RequestParam Long id) {
+        this.userService.connectUser(id);
     }
 
-    @PutMapping()
-    public User updateUser(@RequestBody User userDetails) {
-        return userService.updateUser(userDetails);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+    @PostMapping("/disconnect")
+    public void disconnectUser(@RequestParam Long id) {
+        this.userService.disconnectUser(id);
     }
 }

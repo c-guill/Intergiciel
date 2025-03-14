@@ -1,6 +1,5 @@
 package fr.miaou.frontend.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.*;
 
 import java.sql.Timestamp;

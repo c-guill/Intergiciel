@@ -1,5 +1,8 @@
 package fr.miaou.messagerie.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import fr.miaou.messagerie.model.Contact;
 import fr.miaou.messagerie.model.Message;
 import fr.miaou.messagerie.model.User;
@@ -20,6 +23,11 @@ public class UserService {
     @Autowired
     private MessageService messageService;
 
+    @Autowired
+    private ProducerService producerService;
+
+    private ArrayList<Long> connectedUser = new ArrayList<>();
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -29,7 +37,7 @@ public class UserService {
         List<Contact> contacts = new ArrayList<>();
 
         for (User user : users) {
-            if (user.getIdUser() == userId) continue;
+            if (user.getIdUser() == userId || !this.connectedUser.contains(user.getIdUser())) continue;
             Optional<Message> message = this.messageService.getLastMessageByDiscussion(userId, user.getIdUser());
             Contact contact = Contact.builder()
                     .id(user.getIdUser())
@@ -51,20 +59,31 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updateUser(User userDetails) {
-        return userRepository.findById(userDetails.getIdUser()).map(user -> {
-            user.setNom(userDetails.getNom());
-            return userRepository.save(user);
-        }).orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
-    }
-
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
-    }
-
     public Contact getcontactByUsername(String username) {
         Optional<User> user = this.userRepository.getUserByNom(username);
-        return user.map(Contact::new).orElseGet(() -> new Contact(this.createUser(new User(null, username))));
 
+        return user.map(Contact::new).orElseGet(() -> new Contact(this.createUser(new User(null, username))));
+    }
+
+    public void disconnectUser(Long id) {
+        this.connectedUser.remove(id);
+        this.producerService.manageUser(false, id.toString());
+
+    }
+
+    public void connectUser(Long id) {
+        try {
+            Optional<User> user = this.getUserById(id);
+            if (user.isPresent() && !this.connectedUser.contains(id)) {
+                Contact contact = getcontactByUsername(user.get().getNom());
+                ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+                String json = ow.writeValueAsString(contact);
+
+                this.connectedUser.add(id);
+                this.producerService.manageUser(true, json);
+            }
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

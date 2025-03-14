@@ -2,7 +2,6 @@ package fr.miaou.frontend.controller;
 
 import fr.miaou.frontend.model.Contact;
 import fr.miaou.frontend.model.Message;
-import fr.miaou.frontend.model.Status;
 import fr.miaou.frontend.service.ApiService;
 import fr.miaou.frontend.service.KafkaDynamicConsumerService;
 import jakarta.servlet.http.Cookie;
@@ -54,7 +53,7 @@ public class HomeController {
                 return "redirect:/";
             }
             this.kafkaDynamicConsumerService.startListening(useridstr);
-            Contact garfield = new Contact(userid, username, null, null, Status.AVAILABLE);
+            Contact garfield = new Contact(userid, username, null, null);
             List<Contact> contacts = this.apiService.getContacts(garfield);
             Optional<Contact> target;
             if (targetid == 0) {
@@ -96,7 +95,7 @@ public class HomeController {
             return false;
         }
     }
-
+    
     @DeleteMapping("/disconnect")
     @ResponseBody
     public void disconnect() {
