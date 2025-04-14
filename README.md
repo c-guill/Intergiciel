@@ -1,4 +1,4 @@
-# Projet  Intergiciel : Messagerie Miaou
+# Projet  Intergiciel + kubernetes : Messagerie Miaou
 
 
 ## Equipe :
