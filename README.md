@@ -19,6 +19,8 @@ Actuellement docker lance 2 le frontend sur 2 ports (8081 et 8082). Pour tester 
 
 Pour se connecter en mode privé / broadcast, il ne faut rentrer aucun utilisateur dans le login sur la page d'accueil.
 
+Ce tp concerne le TP2 sous kubernetes, tous les fichiers sont dans le répertoire "kubernetes". L'étape 1 du TP se trouve dans la branche "P1TP2"
+
 ## Prérequis
 - Docker Desktop
 
