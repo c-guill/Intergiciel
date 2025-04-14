@@ -1,0 +1,9 @@
+# Étape d'exécution
+FROM eclipse-temurin:17-jre-alpine
+
+WORKDIR /WebServiceDemo
+
+# Copier le jar généré depuis l'étape BUILD
+COPY --from=build /moteur/target/*.jar WebServiceDemov1.jar
+
+ENTRYPOINT ["java", "-jar", "WebServiceDemov1.jar"]
