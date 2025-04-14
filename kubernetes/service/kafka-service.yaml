@@ -1,19 +1,20 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: kafka
+  name: clt-kafka
 spec:
   replicas: 1
+  serviceName: clt-kafka
   selector:
     matchLabels:
-      app: kafka
+      app: clt-kafka
   template:
     metadata:
       labels:
-        app: kafka
+        app: clt-kafka
     spec:
       containers:
-        - name: kafka
+        - name: clt-kafka
           image: confluentinc/cp-kafka:latest
           ports:
             - containerPort: 9092
@@ -47,7 +48,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: kafka
+  name: clt-kafka
 spec:
   ports:
     - port: 9092
@@ -57,4 +58,4 @@ spec:
       targetPort: 29092
       name: "29092"
   selector:
-    app: kafka
+    app: clt-kafka

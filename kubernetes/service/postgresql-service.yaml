@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:latest
+          image: ubuntu/postgres:latest
           imagePullPolicy: "IfNotPresent"
           ports:
             - containerPort: 5432
@@ -29,3 +29,15 @@ spec:
         - name: postgres-storage
           persistentVolumeClaim:
             claimName: postgres-pvc  # Use the PVC created earlier
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: postgres
