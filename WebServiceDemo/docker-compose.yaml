@@ -1,17 +1,17 @@
 services:
-  WebServiceDemoV1:
+  webservicedemov1:
     build:
-      context: ./WebServiceDemo
+      context: .
       dockerfile: DockerFilev1
     container_name: webservicedemov1
     restart: always
     ports:
       - "8080:8080"
-  WebServiceDemoV2:
+  webservicedemov2:
     build:
-      context: ./WebServiceDemo
+      context: .
       dockerfile: Dockerfilev2
-    container_name: WebServiceDemoV2
+    container_name: webservicedemov2
     restart: always
     ports:
       - "8081:8081"
