@@ -20,6 +20,6 @@ FROM eclipse-temurin:17-jre-alpine
 WORKDIR /WebServiceDemo
 
 # Copier le jar généré depuis l'étape BUILD
-COPY --from=build /moteur/target/*.jar WebServiceDemov2.jar
+COPY --from=build /WebServiceDemo/target/Web*.jar WebServiceDemov2.jar
 
 ENTRYPOINT ["java", "-jar", "WebServiceDemov2.jar"]
