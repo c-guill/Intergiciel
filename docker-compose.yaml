@@ -2,7 +2,7 @@ services:
 
   # Postgres database
   postgres:
-    image: 'postgres:latest'
+    image: 'postgres:17'
     environment:
       - 'POSTGRES_DB=meow'
       - 'POSTGRES_PASSWORD=password1234'
@@ -17,7 +17,7 @@ services:
 
   # Kafka
   zookeeper:
-    image: confluentinc/cp-zookeeper:latest
+    image: confluentinc/cp-zookeeper:7.6.1
     hostname: zookeeper
     container_name: zookeeper
     ports:
@@ -27,7 +27,7 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
 
   broker:
-    image: confluentinc/cp-kafka:latest
+    image: confluentinc/cp-kafka:7.6.1
     hostname: broker
     container_name: broker
     depends_on:
